@@ -175,7 +175,7 @@ select {
     border: 2px solid #e0e0e0;
     border-radius: 6px;
     font-size: 16px;
-    background: #ff9800;
+    background: rgb(63, 47, 47);
     color: white;
     cursor: pointer;
     transition: background 0.3s;
@@ -183,11 +183,15 @@ select {
 
 #preset-select:focus {
     outline: none;
-    border-color: #e67e22;
+    border-color: #292b51;
 }
 
 #preset-select:hover {
-    background: #e67e22;
+    background: #292b51;
+}
+
+input[type="checkbox"] {
+    margin-right: 8px;
 }
 
 /* Responsive Design */
