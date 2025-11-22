@@ -180,8 +180,8 @@ select {
     border: 2px solid #e0e0e0;
     border-radius: 6px;
     font-size: 16px;
-    background: rgb(63, 47, 47);
-    color: white;
+    background: white;
+    color: black;
     cursor: pointer;
     transition: background 0.3s;
 }
@@ -189,10 +189,13 @@ select {
 #preset-select:focus {
     outline: none;
     border-color: #292b51;
+    background-color: white;
+    color: black
 }
 
 #preset-select:hover {
-    background: #292b51;
+    background: black;
+    color: white;
 }
 
 input[type="checkbox"] {
