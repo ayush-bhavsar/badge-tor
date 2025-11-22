@@ -165,6 +165,35 @@ select {
     opacity: 1;
 }
 
+.presets {
+    margin-top: 20px;
+}
+
+#preset-select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 16px;
+    background: rgb(63, 47, 47);
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#preset-select:focus {
+    outline: none;
+    border-color: #292b51;
+}
+
+#preset-select:hover {
+    background: #292b51;
+}
+
+input[type="checkbox"] {
+    margin-right: 8px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     body {
