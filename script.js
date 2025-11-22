@@ -80,6 +80,17 @@ const presets = {
     bitbucket: { label: 'Bitbucket', message: '', color: '4CAF50', labelColor: '0052CC', style: 'for-the-badge' }
 };
 
+// add near top (after DOM elements)
+let lastBadgeUrl = '';
+function debounce(fn, delay = 150) {
+	// simple debounce
+	let timer = null;
+	return (...args) => {
+		clearTimeout(timer);
+		timer = setTimeout(() => fn(...args), delay);
+	};
+}
+
 // Function to generate badge URL
 function generateBadgeUrl() {
     const label = encodeURIComponent(labelInput.value || 'label');
@@ -106,12 +117,30 @@ function generateBadgeUrl() {
     return url;
 }
 
-// Function to update badge preview and markdown
-function updateBadge() {
-    const url = generateBadgeUrl();
-    badgePreview.src = url;
-    markdownLink.value = `![Badge](${url})`;
+// replace updateBadge + preview behavior with preloading + cache
+function updateBadgeImmediate() {
+	const url = generateBadgeUrl();
+	// update markdown immediately
+	markdownLink.value = `![Badge](${url})`;
+
+	// avoid redundant reloads
+	if (url === lastBadgeUrl) return;
+	lastBadgeUrl = url;
+
+	// preload remote image and only set preview when loaded
+	const img = new Image();
+	img.onload = () => {
+		badgePreview.src = url;
+	};
+	img.onerror = () => {
+		// keep previous image on error; optional: set to a fallback
+		console.warn('Failed to load badge:', url);
+	};
+	img.src = url;
 }
+
+// debounce wrapper used for frequent events
+const updateBadge = debounce(updateBadgeImmediate, 120);
 
 // Function to sync label color inputs
 function syncLabelColorInputs(source) {
@@ -206,15 +235,15 @@ function toggleMessageInput() {
 // Event listeners
 labelInput.addEventListener('input', updateBadge);
 messageInput.addEventListener('input', updateBadge);
-labelColorInput.addEventListener('input', () => syncLabelColorInputs('picker'));
-labelColorHexInput.addEventListener('input', () => syncLabelColorInputs('hex'));
-colorInput.addEventListener('input', () => syncColorInputs('picker'));
-colorHexInput.addEventListener('input', () => syncColorInputs('hex'));
+labelColorInput.addEventListener('input', () => { syncLabelColorInputs('picker'); });
+labelColorHexInput.addEventListener('input', () => { syncLabelColorInputs('hex'); });
+colorInput.addEventListener('input', () => { syncColorInputs('picker'); });
+colorHexInput.addEventListener('input', () => { syncColorInputs('hex'); });
 styleSelect.addEventListener('change', updateBadge);
 logoInput.addEventListener('input', updateBadge);
-logoColorInput.addEventListener('input', () => syncLogoColorInputs('picker'));
-logoColorHexInput.addEventListener('input', () => syncLogoColorInputs('hex'));
-includeMessageCheckbox.addEventListener('change', toggleMessageInput);
+logoColorInput.addEventListener('input', () => { syncLogoColorInputs('picker'); });
+logoColorHexInput.addEventListener('input', () => { syncLogoColorInputs('hex'); });
+includeMessageCheckbox.addEventListener('change', () => { toggleMessageInput(); updateBadgeImmediate(); });
 
 // Copy to clipboard functionality
 copyButton.addEventListener('click', async () => {
@@ -256,6 +285,7 @@ document.getElementById('preset-select').addEventListener('change', (e) => {
     const presetKey = e.target.value;
     if (presetKey) {
         applyPreset(presetKey);
+        updateBadgeImmediate(); // immediate preview for preset selection
     }
 });
 
