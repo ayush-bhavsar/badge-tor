@@ -7,6 +7,9 @@ const labelColorHexInput = document.getElementById('label-color-hex');
 const colorInput = document.getElementById('color');
 const colorHexInput = document.getElementById('color-hex');
 const styleSelect = document.getElementById('style');
+const logoInput = document.getElementById('logo');
+const logoColorInput = document.getElementById('logo-color');
+const logoColorHexInput = document.getElementById('logo-color-hex');
 const badgePreview = document.getElementById('badge-preview');
 const markdownLink = document.getElementById('markdown-link');
 const copyButton = document.getElementById('copy-button');
@@ -82,15 +85,25 @@ function generateBadgeUrl() {
     const label = encodeURIComponent(labelInput.value || 'label');
     const labelColor = labelColorHexInput.value.replace('#', '');
     const style = styleSelect.value;
+    const logo = encodeURIComponent(logoInput.value);
+    const logoColor = logoColorHexInput.value.replace('#', '');
     
+    let url = '';
+
     if (includeMessageCheckbox.checked) {
         const message = encodeURIComponent(messageInput.value);
         const color = colorHexInput.value.replace('#', '');
-        return `https://img.shields.io/badge/${label}-${message}-${color}?style=${style}&labelColor=${labelColor}`;
+        url = `https://img.shields.io/badge/${label}-${message}-${color}?style=${style}&labelColor=${labelColor}`;
     } else {
         // Render single-part badge (Label only) to avoid empty message box
-        return `https://img.shields.io/badge/-${label}-${labelColor}?style=${style}`;
+        url = `https://img.shields.io/badge/-${label}-${labelColor}?style=${style}`;
     }
+
+    if (logo) {
+        url += `&logo=${logo}&logoColor=${logoColor}`;
+    }
+    
+    return url;
 }
 
 // Function to update badge preview and markdown
@@ -130,6 +143,21 @@ function syncColorInputs(source) {
     updateBadge();
 }
 
+// Function to sync logo color inputs
+function syncLogoColorInputs(source) {
+    if (source === 'picker') {
+        const hex = logoColorInput.value.replace('#', '');
+        logoColorHexInput.value = hex;
+    } else {
+        let hex = logoColorHexInput.value.replace('#', '');
+        // Ensure valid hex format
+        if (/^[0-9A-Fa-f]{3,6}$/.test(hex)) {
+            logoColorInput.value = '#' + hex;
+        }
+    }
+    updateBadge();
+}
+
 // Function to show success message
 function showSuccessMessage() {
     successMessage.classList.add('show');
@@ -147,12 +175,17 @@ function applyPreset(presetKey) {
     labelColorHexInput.value = preset.labelColor;
     styleSelect.value = preset.style;
     
+    // Use preset logo or default to the preset key (most match Simple Icons slugs)
+    logoInput.value = preset.logo || presetKey;
+    logoColorHexInput.value = 'ffffff'; // Default logo color
+
     // Automatically uncheck "Include Message" if preset message is empty
     includeMessageCheckbox.checked = preset.message !== '';
     toggleMessageInput(); // Updates UI visibility and calls updateBadge
 
     syncColorInputs('hex');
     syncLabelColorInputs('hex');
+    syncLogoColorInputs('hex');
 }
 
 // Function to toggle message input visibility
@@ -178,6 +211,9 @@ labelColorHexInput.addEventListener('input', () => syncLabelColorInputs('hex'));
 colorInput.addEventListener('input', () => syncColorInputs('picker'));
 colorHexInput.addEventListener('input', () => syncColorInputs('hex'));
 styleSelect.addEventListener('change', updateBadge);
+logoInput.addEventListener('input', updateBadge);
+logoColorInput.addEventListener('input', () => syncLogoColorInputs('picker'));
+logoColorHexInput.addEventListener('input', () => syncLogoColorInputs('hex'));
 includeMessageCheckbox.addEventListener('change', toggleMessageInput);
 
 // Copy to clipboard functionality

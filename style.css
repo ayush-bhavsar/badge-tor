@@ -98,6 +98,11 @@ input[type="color"] {
     flex: none;
 }
 
+#logo-color-hex {
+    width: 100px;
+    flex: none;
+}
+
 select {
     cursor: pointer;
 }
