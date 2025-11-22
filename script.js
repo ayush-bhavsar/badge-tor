@@ -1,6 +1,8 @@
 // Get DOM elements
 const labelInput = document.getElementById('label');
 const messageInput = document.getElementById('message');
+const labelColorInput = document.getElementById('label-color');
+const labelColorHexInput = document.getElementById('label-color-hex');
 const colorInput = document.getElementById('color');
 const colorHexInput = document.getElementById('color-hex');
 const styleSelect = document.getElementById('style');
@@ -13,10 +15,11 @@ const successMessage = document.getElementById('success-message');
 function generateBadgeUrl() {
     const label = encodeURIComponent(labelInput.value || 'label');
     const message = encodeURIComponent(messageInput.value || 'message');
+    const labelColor = labelColorHexInput.value.replace('#', '');
     const color = colorHexInput.value.replace('#', '');
     const style = styleSelect.value;
     
-    return `https://img.shields.io/badge/${label}-${message}-${color}?style=${style}`;
+    return `https://img.shields.io/badge/${label}-${message}-${color}?style=${style}&labelColor=${labelColor}`;
 }
 
 // Function to update badge preview and markdown
@@ -24,6 +27,21 @@ function updateBadge() {
     const url = generateBadgeUrl();
     badgePreview.src = url;
     markdownLink.value = `![Badge](${url})`;
+}
+
+// Function to sync label color inputs
+function syncLabelColorInputs(source) {
+    if (source === 'picker') {
+        const hex = labelColorInput.value.replace('#', '');
+        labelColorHexInput.value = hex;
+    } else {
+        let hex = labelColorHexInput.value.replace('#', '');
+        // Ensure valid hex format
+        if (/^[0-9A-Fa-f]{3,6}$/.test(hex)) {
+            labelColorInput.value = '#' + hex;
+        }
+    }
+    updateBadge();
 }
 
 // Function to sync color inputs
@@ -52,6 +70,8 @@ function showSuccessMessage() {
 // Event listeners
 labelInput.addEventListener('input', updateBadge);
 messageInput.addEventListener('input', updateBadge);
+labelColorInput.addEventListener('input', () => syncLabelColorInputs('picker'));
+labelColorHexInput.addEventListener('input', () => syncLabelColorInputs('hex'));
 colorInput.addEventListener('input', () => syncColorInputs('picker'));
 colorHexInput.addEventListener('input', () => syncColorInputs('hex'));
 styleSelect.addEventListener('change', updateBadge);
@@ -62,14 +82,22 @@ copyButton.addEventListener('click', async () => {
         await navigator.clipboard.writeText(markdownLink.value);
         showSuccessMessage();
         copyButton.textContent = 'Copied!';
+        copyButton.style.background = '#2196f3';
         setTimeout(() => {
             copyButton.textContent = 'Copy';
+            copyButton.style.background = '#4caf50';
         }, 2000);
     } catch (err) {
         // Fallback for older browsers
         markdownLink.select();
         document.execCommand('copy');
         showSuccessMessage();
+        copyButton.textContent = 'Copied!';
+        copyButton.style.background = '#2196f3';
+        setTimeout(() => {
+            copyButton.textContent = 'Copy';
+            copyButton.style.background = '#4caf50';
+        }, 2000);
     }
 });
 

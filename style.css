@@ -6,7 +6,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: #f0f2f5;
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
     min-height: 100vh;
     padding: 20px;
     display: flex;
@@ -15,11 +15,11 @@ body {
 }
 
 .container {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     padding: 40px;
-    max-width: 600px;
+    max-width: 800px;
     width: 100%;
 }
 
@@ -28,6 +28,16 @@ h1 {
     margin-bottom: 30px;
     text-align: center;
     font-size: 2rem;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: relative;
+}
+
+h1::before {
+    content: '';
+    font-size: 1.5em;
+    margin-right: 10px;
 }
 
 h2 {
@@ -79,7 +89,13 @@ input[type="color"] {
 }
 
 #color-hex {
-    flex: 1;
+    width: 100px;
+    flex: none;
+}
+
+#label-color-hex {
+    width: 100px;
+    flex: none;
 }
 
 select {
@@ -98,7 +114,7 @@ select {
 }
 
 #badge-preview {
-    max-width: 100%;
+    width: 200px;
     height: auto;
 }
 
@@ -115,7 +131,7 @@ select {
 
 #copy-button {
     padding: 12px 24px;
-    background: #667eea;
+    background: #4caf50;
     color: white;
     border: none;
     border-radius: 6px;
@@ -126,7 +142,7 @@ select {
 }
 
 #copy-button:hover {
-    background: #5568d3;
+    background: #45a049;
 }
 
 #copy-button:active {
