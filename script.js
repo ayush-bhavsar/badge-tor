@@ -83,12 +83,12 @@ const presets = {
 // add near top (after DOM elements)
 let lastBadgeUrl = '';
 function debounce(fn, delay = 150) {
-	// simple debounce
-	let timer = null;
-	return (...args) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => fn(...args), delay);
-	};
+    // simple debounce
+    let timer = null;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
 }
 
 // Function to generate badge URL
@@ -98,7 +98,7 @@ function generateBadgeUrl() {
     const style = styleSelect.value;
     const logo = encodeURIComponent(logoInput.value);
     const logoColor = logoColorHexInput.value.replace('#', '');
-    
+
     let url = '';
 
     if (includeMessageCheckbox.checked) {
@@ -113,30 +113,30 @@ function generateBadgeUrl() {
     if (logo) {
         url += `&logo=${logo}&logoColor=${logoColor}`;
     }
-    
+
     return url;
 }
 
 // replace updateBadge + preview behavior with preloading + cache
 function updateBadgeImmediate() {
-	const url = generateBadgeUrl();
-	// update markdown immediately
-	markdownLink.value = `![Badge](${url})`;
+    const url = generateBadgeUrl();
+    // update markdown immediately
+    markdownLink.value = `![Badge](${url})`;
 
-	// avoid redundant reloads
-	if (url === lastBadgeUrl) return;
-	lastBadgeUrl = url;
+    // avoid redundant reloads
+    if (url === lastBadgeUrl) return;
+    lastBadgeUrl = url;
 
-	// preload remote image and only set preview when loaded
-	const img = new Image();
-	img.onload = () => {
-		badgePreview.src = url;
-	};
-	img.onerror = () => {
-		// keep previous image on error; optional: set to a fallback
-		console.warn('Failed to load badge:', url);
-	};
-	img.src = url;
+    // preload remote image and only set preview when loaded
+    const img = new Image();
+    img.onload = () => {
+        badgePreview.src = url;
+    };
+    img.onerror = () => {
+        // keep previous image on error; optional: set to a fallback
+        console.warn('Failed to load badge:', url);
+    };
+    img.src = url;
 }
 
 // debounce wrapper used for frequent events
@@ -195,6 +195,21 @@ function showSuccessMessage() {
     }, 2000);
 }
 
+// Function to toggle message input visibility
+function toggleMessageInput() {
+    const messageColorGroup = document.getElementById('message-color-group');
+
+    if (includeMessageCheckbox.checked) {
+        messageInput.style.display = 'block';
+        messageColorGroup.style.display = 'block';
+    } else {
+        messageInput.style.display = 'none';
+        messageColorGroup.style.display = 'none';
+        messageInput.value = '';
+        updateBadge();
+    }
+}
+
 // Function to apply preset
 function applyPreset(presetKey) {
     const preset = presets[presetKey];
@@ -203,7 +218,7 @@ function applyPreset(presetKey) {
     colorHexInput.value = preset.color;
     labelColorHexInput.value = preset.labelColor;
     styleSelect.value = preset.style;
-    
+
     // Use preset logo or default to the preset key (most match Simple Icons slugs)
     logoInput.value = preset.logo || presetKey;
     logoColorHexInput.value = 'ffffff'; // Default logo color
@@ -215,21 +230,6 @@ function applyPreset(presetKey) {
     syncColorInputs('hex');
     syncLabelColorInputs('hex');
     syncLogoColorInputs('hex');
-}
-
-// Function to toggle message input visibility
-function toggleMessageInput() {
-    const messageGroup = messageInput.closest('.form-group');
-    const messageColorGroup = document.getElementById('message-color-group');
-    if (includeMessageCheckbox.checked) {
-        messageGroup.style.display = 'block';
-        messageColorGroup.style.display = 'block';
-    } else {
-        messageGroup.style.display = 'none';
-        messageColorGroup.style.display = 'none';
-        messageInput.value = '';
-        updateBadge();
-    }
 }
 
 // Event listeners

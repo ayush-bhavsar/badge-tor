@@ -1,139 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Badge Creator</title>
+    <title>Badge Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
-        <h1>Custom Badge Creator</h1>
-        <div class="form-group">
-            <label for="label">Label:</label>
-            <input type="text" id="label" placeholder="e.g., build" value="build">
-        </div>
-        <div class="form-group">
-            <label for="message">Message:</label>
-            <input type="text" id="message" placeholder="e.g., passing" value="passing">
-        </div>
-        <div class="form-group">
-            <input type="checkbox" id="include-message" checked>
-            <label for="include-message">Include Message</label>
-        </div>
-        <div class="form-group">
-            <label for="label-color">Label Color:</label>
-            <div class="color-input-group">
-                <input type="color" id="label-color" value="#555">
-                <input type="text" id="label-color-hex" placeholder="#555" value="555" maxlength="7">
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Badge Generator</h1>
+            <p class="subtitle">Create custom badges for your projects</p>
+        </header>
+
+        <main class="main-content">
+            <div class="editor-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Content</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="label">Label</label>
+                            <input type="text" id="label" placeholder="e.g., build" value="build">
+                        </div>
+                        <div class="form-group">
+                            <div class="flex-between">
+                                <label for="message">Message</label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="include-message" checked>
+                                    <label for="include-message" class="checkbox-label">Include</label>
+                                </div>
+                            </div>
+                            <input type="text" id="message" placeholder="e.g., passing" value="passing">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Appearance</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="label-color">Label Color</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="label-color" value="#555555">
+                                    <input type="text" id="label-color-hex" value="555555" maxlength="7">
+                                </div>
+                            </div>
+                            <div class="form-group half" id="message-color-group">
+                                <label for="color">Message Color</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="color" value="#44cc11">
+                                    <input type="text" id="color-hex" value="44cc11" maxlength="7">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="style">Style</label>
+                            <div class="select-wrapper">
+                                <select id="style">
+                                    <option value="flat">Flat</option>
+                                    <option value="flat-square">Flat Square</option>
+                                    <option value="plastic">Plastic</option>
+                                    <option value="for-the-badge">For The Badge</option>
+                                    <option value="social">Social</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Icon</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="logo">
+                                Icon Slug
+                                <a href="https://simpleicons.org/" target="_blank" class="helper-link">Find icons ↗</a>
+                            </label>
+                            <input type="text" id="logo" placeholder="e.g., github">
+                        </div>
+                        <div class="form-group">
+                            <label for="logo-color">Icon Color</label>
+                            <div class="color-picker-wrapper">
+                                <input type="color" id="logo-color" value="#ffffff">
+                                <input type="text" id="logo-color-hex" value="ffffff" maxlength="7">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group" id="message-color-group">
-            <label for="color">Message Color:</label>
-            <div class="color-input-group">
-                <input type="color" id="color" value="#44cc11">
-                <input type="text" id="color-hex" placeholder="#44cc11" value="44cc11" maxlength="7">
+
+            <div class="preview-section">
+                <div class="sticky-wrapper">
+                    <div class="card preview-card">
+                        <div class="card-header">
+                            <h2>Live Preview</h2>
+                        </div>
+                        <div class="card-body centered">
+                            <div class="badge-container">
+                                <img id="badge-preview"
+                                    src="https://img.shields.io/badge/build-passing-44cc11?style=flat"
+                                    alt="Badge Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Usage</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="markdown-link">Markdown</label>
+                                <div class="copy-input-wrapper">
+                                    <input type="text" id="markdown-link"
+                                        value="![Badge](https://img.shields.io/badge/build-passing-44cc11?style=flat)"
+                                        readonly>
+                                    <button id="copy-button" class="btn-primary">Copy</button>
+                                </div>
+                            </div>
+                            <div class="success-message" id="success-message">Copied to clipboard!</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Presets</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="select-wrapper">
+                                <select id="preset-select">
+                                    <option value="">Select a preset...</option>
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="python">Python</option>
+                                    <option value="rust">Rust</option>
+                                    <option value="react">React</option>
+                                    <option value="vue">Vue</option>
+                                    <option value="angular">Angular</option>
+                                    <option value="nodejs">Node.js</option>
+                                    <option value="docker">Docker</option>
+                                    <option value="aws">AWS</option>
+                                    <option value="github">GitHub</option>
+                                    <!-- Add more popular ones if needed, keeping it clean for now -->
+                                </select>
+                            </div>
+                            <p class="helper-text">Select a preset to auto-fill fields.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="style">Style:</label>
-            <select id="style">
-                <option value="flat">Flat</option>
-                <option value="flat-square">Flat Square</option>
-                <option value="plastic">Plastic</option>
-                <option value="for-the-badge">For The Badge</option>
-                <option value="social">Social</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="logo">Icon (Simple Icons slug): <a href="https://simpleicons.org/" target="_blank" style="font-size: 0.8em; color: #667eea; text-decoration: none;">(View available icons)</a></label>
-            <input type="text" id="logo" placeholder="e.g., github">
-        </div>
-        <div class="form-group">
-            <label for="logo-color">Icon Color:</label>
-            <div class="color-input-group">
-                <input type="color" id="logo-color" value="#ffffff">
-                <input type="text" id="logo-color-hex" placeholder="ffffff" value="ffffff" maxlength="7">
-            </div>
-        </div>
-        <h2>Preview</h2>
-        <div class="preview">
-            <img id="badge-preview" src="https://img.shields.io/badge/build-passing-44cc11?style=flat" alt="Badge Preview">
-        </div>
-        <h2>Markdown</h2>
-        <div class="markdown">
-            <input type="text" id="markdown-link" value="![Badge](https://img.shields.io/badge/build-passing-44cc11?style=flat)" readonly>
-            <button id="copy-button">Copy</button>
-        </div>
-        <div class="success-message" id="success-message">Copied to clipboard!</div>
-        <h2>Preset Badges</h2>
-        <div class="presets">
-            <select id="preset-select">
-                <option value="">Select a preset</option>
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="rust">Rust</option>
-                <option value="r">R</option>
-                <option value="cpp">C++</option>
-                <option value="java">Java</option>
-                <option value="go">Go</option>
-                <option value="typescript">TypeScript</option>
-                <option value="c">C</option>
-                <option value="csharp">C#</option>
-                <option value="php">PHP</option>
-                <option value="ruby">Ruby</option>
-                <option value="swift">Swift</option>
-                <option value="kotlin">Kotlin</option>
-                <option value="scala">Scala</option>
-                <option value="perl">Perl</option>
-                <option value="lua">Lua</option>
-                <option value="haskell">Haskell</option>
-                <option value="clojure">Clojure</option>
-                <option value="erlang">Erlang</option>
-                <option value="elixir">Elixir</option>
-                <option value="dart">Dart</option>
-                <option value="flutter">Flutter</option>
-                <option value="react">React</option>
-                <option value="vue">Vue</option>
-                <option value="angular">Angular</option>
-                <option value="svelte">Svelte</option>
-                <option value="nodejs">Node.js</option>
-                <option value="django">Django</option>
-                <option value="flask">Flask</option>
-                <option value="spring">Spring</option>
-                <option value="laravel">Laravel</option>
-                <option value="rails">Rails</option>
-                <option value="express">Express</option>
-                <option value="fastapi">FastAPI</option>
-                <option value="graphql">GraphQL</option>
-                <option value="docker">Docker</option>
-                <option value="kubernetes">Kubernetes</option>
-                <option value="aws">AWS</option>
-                <option value="azure">Azure</option>
-                <option value="gcp">GCP</option>
-                <option value="linux">Linux</option>
-                <option value="windows">Windows</option>
-                <option value="macos">macOS</option>
-                <option value="ubuntu">Ubuntu</option>
-                <option value="centos">CentOS</option>
-                <option value="fedora">Fedora</option>
-                <option value="debian">Debian</option>
-                <option value="arch">Arch Linux</option>
-                <option value="mysql">MySQL</option>
-                <option value="postgresql">PostgreSQL</option>
-                <option value="mongodb">MongoDB</option>
-                <option value="redis">Redis</option>
-                <option value="sqlite">SQLite</option>
-                <option value="firebase">Firebase</option>
-                <option value="heroku">Heroku</option>
-                <option value="vercel">Vercel</option>
-                <option value="netlify">Netlify</option>
-                <option value="github">GitHub</option>
-                <option value="gitlab">GitLab</option>
-                <option value="bitbucket">Bitbucket</option>
-            </select>
-        </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
